@@ -14,7 +14,7 @@ const ListField = ({ name, label = 'Name', title }) => (
                 display: 'flex',
               }}
             >
-              <Form.Item label={label}>
+              <Form.Item name={name} {...field} label={label}>
                 <Input />
               </Form.Item>
               <Button
