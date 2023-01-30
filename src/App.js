@@ -1,12 +1,17 @@
-import logo from './logo.svg';
 import './App.css';
 import { Button, DatePicker, Form, Input, TimePicker } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
 import SignatureComponent from './components/SignaturePad/SignaturePad';
 import { useRef } from 'react';
+import axios from 'axios';
+import ListField from './components/ListField/ListField';
 
 const onFinish = (values) => {
   console.log('success', values);
+  axios
+    .post('http://localhost:3001/session-reports', values)
+    .then((res) => console.log('success', res))
+    .catch((error) => console.log('error', error));
 };
 
 const onFinishFailed = (errorInfo) => {
@@ -58,18 +63,11 @@ function App() {
         <Form.Item name="fileLocation" label="File Location">
           <Input />
         </Form.Item>
-        <Form.Item name="micsUsed" label="Mics Used">
-          <Input />
-        </Form.Item>
-        <Form.Item name="preAmpsUsed" label="Pre-Amps Used">
-          <Input />
-        </Form.Item>
-        <Form.Item name="outboardGearUsed" label="Out board Gear Used">
-          <Input />
-        </Form.Item>
-        <Form.Item name="instrumentsUsed" label="Instruments Used">
-          <Input />
-        </Form.Item>
+        <ListField name="micsUsed" title="Mics Used" />
+        <ListField name="preAmpsUsed" title="Pre-Amps Used" />
+        <ListField name="outboardGearUsed" title="Out board Gear Used" />
+        <ListField name="instrumentsUsed" title="Instruments Used" />
+
         <Form.Item name="sslSessionName" label="SSL Session Name">
           <Input />
         </Form.Item>
