@@ -3,9 +3,10 @@ import React, {
   useEffect,
   useImperativeHandle,
   useState,
-} from 'react';
-import SignaturePad from 'signature_pad';
-import './SignaturePad.css';
+} from "react";
+import SignaturePad from "signature_pad";
+import { Button } from "antd";
+import "./SignaturePad.css";
 
 const SignatureComponent = forwardRef(({ padNumber }, ref) => {
   const [signaturePad, setSignaturePad] = useState(null);
@@ -17,11 +18,11 @@ const SignatureComponent = forwardRef(({ padNumber }, ref) => {
         return signaturePad?.isEmpty() || true;
       },
       getJpeg: () => {
-        const data = signaturePad?.toDataURL('image/jpeg');
+        const data = signaturePad?.toDataURL("image/jpeg");
         return data;
       },
       getPng: () => {
-        const data = signaturePad?.toDataURL('image/png');
+        const data = signaturePad?.toDataURL("image/png");
         return data;
       },
     }),
@@ -35,14 +36,14 @@ const SignatureComponent = forwardRef(({ padNumber }, ref) => {
       var ratio = Math.max(window.devicePixelRatio || 1, 1);
       canvas.width = canvas.offsetWidth * ratio;
       canvas.height = canvas.offsetHeight * ratio;
-      canvas.getContext('2d').scale(ratio, ratio);
+      canvas.getContext("2d").scale(ratio, ratio);
     }
 
     window.onresize = resizeCanvas;
     resizeCanvas();
 
     let signaturePad = new SignaturePad(canvas, {
-      backgroundColor: 'rgb(255, 255, 255)',
+      backgroundColor: "rgb(255, 255, 255)",
     });
 
     // document.getElementById('save-png').addEventListener('click', function () {
@@ -82,7 +83,9 @@ const SignatureComponent = forwardRef(({ padNumber }, ref) => {
           height={200}
         ></canvas>
       </div>
-      <button onClick={clear}>Clear</button>
+      <Button style={{marginTop: '.75rem'}} type="primary" onClick={clear}>
+        Clear
+      </Button>
     </div>
   );
 });
