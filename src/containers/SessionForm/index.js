@@ -1,10 +1,10 @@
-import React from "react";
-import { Button, DatePicker, Form, Input, TimePicker, Row, Col } from "antd";
-import TextArea from "antd/es/input/TextArea";
-import SignatureComponent from "../../components/SignaturePad/SignaturePad";
-import ListField from "../../components/ListField/ListField";
-import { useRef } from "react";
-import axios from "axios";
+import React from 'react';
+import { Button, DatePicker, Form, Input, TimePicker, Row, Col } from 'antd';
+import TextArea from 'antd/es/input/TextArea';
+import SignatureComponent from '../../components/SignaturePad/SignaturePad';
+import ListField from '../../components/ListField/ListField';
+import { useRef } from 'react';
+import axios from 'axios';
 
 const SessionForm = () => {
   const engineerSignRef = useRef();
@@ -13,15 +13,15 @@ const SessionForm = () => {
   const [form] = Form.useForm();
 
   const onFinish = (values) => {
-    console.log("success", values);
+    console.log('success', values);
     axios
-      .post("http://localhost:3001/session-reports", values)
-      .then((res) => console.log("success", res))
-      .catch((error) => console.log("error", error));
+      .post('http://localhost:3001/session-reports', values)
+      .then((res) => console.log('success', res))
+      .catch((error) => console.log('error', error));
   };
 
   const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
+    console.log('Failed:', errorInfo);
   };
 
   return (
