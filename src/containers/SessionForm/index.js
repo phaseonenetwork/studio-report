@@ -1,10 +1,10 @@
-import React from "react";
-import { Button, DatePicker, Form, Input, TimePicker } from "antd";
-import TextArea from "antd/es/input/TextArea";
-import SignatureComponent from "../../components/SignaturePad/SignaturePad";
-import ListField from "../../components/ListField/ListField";
-import { useRef } from "react";
-import axios from "axios";
+import React from 'react';
+import { Button, DatePicker, Form, Input, TimePicker } from 'antd';
+import TextArea from 'antd/es/input/TextArea';
+import SignatureComponent from '../../components/SignaturePad/SignaturePad';
+import ListField from '../../components/ListField/ListField';
+import { useRef } from 'react';
+import axios from 'axios';
 
 const SessionForm = () => {
   const engineerSignRef = useRef();
@@ -13,15 +13,15 @@ const SessionForm = () => {
   const [form] = Form.useForm();
 
   const onFinish = (values) => {
-    console.log("success", values);
-    axios
-      .post("http://localhost:3001/session-reports", values)
-      .then((res) => console.log("success", res))
-      .catch((error) => console.log("error", error));
-  };
+    values.engineerSignature = engineerSignRef.current.getPng();
+    values.assistantEngineerSignature =
+      assistantEngineerSignRef.current.getPng();
+    values.clientSignature = clientSignRef.current.getPng();
 
-  const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
+    axios
+      .post('http://localhost:3001/session-reports', values)
+      .then((res) => console.log('success', res))
+      .catch((error) => console.log('error', error));
   };
 
   return (
@@ -32,14 +32,16 @@ const SessionForm = () => {
         name="form"
         initialValues={{}}
         onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
         autoComplete="off"
       >
         <Form.Item name="date" label="Date">
           <DatePicker />
         </Form.Item>
-        <Form.Item name="startAndEndTime" label="Start/End Time">
-          <TimePicker.RangePicker />
+        <Form.Item name="startTime" label="Start Time">
+          <TimePicker />
+        </Form.Item>
+        <Form.Item name="endTime" label="Start Time">
+          <TimePicker />
         </Form.Item>
         <Form.Item name="artist" label="Artist">
           <Input />
@@ -65,6 +67,7 @@ const SessionForm = () => {
         <Form.Item name="fileLocation" label="File Location">
           <Input />
         </Form.Item>
+
         <ListField name="micsUsed" title="Mics Used" />
         <ListField name="preAmpsUsed" title="Pre-Amps Used" />
         <ListField name="outboardGearUsed" title="Out board Gear Used" />
