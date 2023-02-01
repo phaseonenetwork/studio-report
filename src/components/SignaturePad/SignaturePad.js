@@ -5,6 +5,7 @@ import React, {
   useState,
 } from 'react';
 import SignaturePad from 'signature_pad';
+import { Button } from 'antd';
 import './SignaturePad.css';
 
 const SignatureComponent = forwardRef(({ padNumber }, ref) => {
@@ -82,7 +83,9 @@ const SignatureComponent = forwardRef(({ padNumber }, ref) => {
           height={200}
         ></canvas>
       </div>
-      <button onClick={clear}>Clear</button>
+      <Button style={{ marginTop: '.75rem' }} type="primary" onClick={clear}>
+        Clear
+      </Button>
     </div>
   );
 });
