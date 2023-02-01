@@ -6,6 +6,29 @@ import ListField from '../../components/ListField/ListField';
 import { useRef } from 'react';
 import axios from 'axios';
 
+const formDefaultValues = {
+  data: '',
+  startTime: '',
+  endTime: '',
+  artist: '',
+  label: '',
+  personWhoBooked: '',
+  engineer: '',
+  assistantEngineer: '',
+  featuredArtists: '',
+  sessionName: '',
+  fileLocation: '',
+  micsUsed: [],
+  preAmpsUsed: [],
+  outboardGearUsed: [],
+  instrumentsUsed: [],
+  sslSessionName: '',
+  engineerSignature: '',
+  assistantEngineerSignature: '',
+  clientSignature: '',
+  notes: '',
+};
+
 const SessionForm = () => {
   const engineerSignRef = useRef();
   const assistantEngineerSignRef = useRef();
@@ -35,7 +58,7 @@ const SessionForm = () => {
           <Form
             form={form}
             name="form"
-            initialValues={{}}
+            initialValues={{ ...formDefaultValues }}
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
             autoComplete="off"

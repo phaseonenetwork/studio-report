@@ -6,7 +6,7 @@ const ListField = ({ name, label = 'Name', title }) => (
     <label style={{ textAlign: 'left', display: 'flex' }}>{title}</label>
     <Form.List name={name}>
       {(fields, { add, remove }) => (
-        <div>
+        <>
           {fields.map((field) => (
             <div
               key={field.key}
@@ -21,13 +21,14 @@ const ListField = ({ name, label = 'Name', title }) => (
                 icon={<CloseOutlined />}
                 style={{ marginLeft: 5 }}
                 onClick={() => remove(field.name)}
-              ></Button>
+                danger
+              />
             </div>
           ))}
-          <Button onClick={add} style={{ display: 'flex' }}>
+          <Button type='primary' onClick={() => add()} style={{ display: 'flex', marginTop: '.5rem', marginBottom: '.5rem' }}>
             Add
           </Button>
-        </div>
+        </>
       )}
     </Form.List>
   </>
