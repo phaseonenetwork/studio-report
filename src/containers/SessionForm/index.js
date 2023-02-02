@@ -4,7 +4,6 @@ import {
   DatePicker,
   Form,
   Input,
-  TimePicker,
   Row,
   Col,
   message,
@@ -17,6 +16,8 @@ import axios from 'axios';
 import { INVALID_EMAIL, REQUIRED } from '../../utils/messages';
 import { useParams } from 'react-router-dom';
 import dayjs from 'dayjs';
+import Timepicker from 'react-time-picker';
+import './index.css';
 
 const EMAIL_RULES = [
   { required: true, message: REQUIRED },
@@ -132,10 +133,10 @@ const SessionForm = () => {
               <DatePicker />
             </Form.Item>
             <Form.Item name="startTime" label="Start Time">
-              <TimePicker showSecond={false} />
+              <Timepicker disableClock className="custom-timepicker-theme" />
             </Form.Item>
             <Form.Item name="endTime" label="End Time">
-              <TimePicker showSecond={false} />
+              <Timepicker disableClock className="custom-timepicker-theme" />
             </Form.Item>
             <Form.Item name="artist" label="Artist">
               <Input />
