@@ -8,7 +8,7 @@ import SignaturePad from 'signature_pad';
 import { Button } from 'antd';
 import './SignaturePad.css';
 
-const SignatureComponent = forwardRef(({ padNumber }, ref) => {
+const SignatureComponent = forwardRef(({ padNumber, signature }, ref) => {
   const [signaturePad, setSignaturePad] = useState(null);
 
   useImperativeHandle(
@@ -24,6 +24,9 @@ const SignatureComponent = forwardRef(({ padNumber }, ref) => {
       getPng: () => {
         const data = signaturePad?.toDataURL('image/png');
         return data;
+      },
+      setSignature: (signature) => {
+        if (signature) signaturePad?.fromDataURL(signature);
       },
     }),
     [signaturePad]

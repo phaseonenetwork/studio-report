@@ -30,16 +30,34 @@ const SessionForm = () => {
   const [form] = Form.useForm();
   let { id } = useParams();
 
+  const loadFormData = (values) => {
+    if (values.date) values.date = dayjs(new Date(values.date));
+    if (values.startTime) values.startTime = dayjs(new Date(values.startTime));
+    if (values.endTime) values.endTime = dayjs(new Date(values.endTime));
+
+    if (values.engineerSignature) {
+      engineerSignRef.current.setSignature(values.engineerSignature);
+    }
+
+    if (values.assistantEngineerSignature) {
+      assistantEngineerSignRef.current.setSignature(
+        values.assistantEngineerSignature
+      );
+    }
+
+    if (values.clientSignature) {
+      clientSignRef.current.setSignature(values.clientSignature);
+    }
+
+    form.setFieldsValue(values);
+  };
+
   useEffect(() => {
     axios
       .get(`http://localhost:3001/session-reports/${id}`)
       .then((res) => {
         const values = res.data;
-        if (values.date) values.date = dayjs(new Date(values.date));
-        if (values.startTime)
-          values.startTime = dayjs(new Date(values.startTime));
-        if (values.endTime) values.endTime = dayjs(new Date(values.endTime));
-        form.setFieldsValue(values);
+        loadFormData(values);
       })
       .catch((error) => console.log('error', error));
   }, []);
