@@ -1,16 +1,48 @@
-import React from 'react';
-import { Button, DatePicker, Form, Input, TimePicker, Row, Col } from 'antd';
+import React, { useEffect } from 'react';
+import {
+  Button,
+  DatePicker,
+  Form,
+  Input,
+  TimePicker,
+  Row,
+  Col,
+  message,
+} from 'antd';
 import TextArea from 'antd/es/input/TextArea';
 import SignatureComponent from '../../components/SignaturePad/SignaturePad';
 import ListField from '../../components/ListField/ListField';
 import { useRef } from 'react';
 import axios from 'axios';
+import { INVALID_EMAIL, REQUIRED } from '../../utils/messages';
+import { useParams } from 'react-router-dom';
+import dayjs from 'dayjs';
+
+const EMAIL_RULES = [
+  { required: true, message: REQUIRED },
+  { type: 'email', message: INVALID_EMAIL },
+];
 
 const SessionForm = () => {
   const engineerSignRef = useRef();
   const assistantEngineerSignRef = useRef();
   const clientSignRef = useRef();
   const [form] = Form.useForm();
+  let { id } = useParams();
+
+  useEffect(() => {
+    axios
+      .get(`http://localhost:3001/session-reports/${id}`)
+      .then((res) => {
+        const values = res.data;
+        if (values.date) values.date = dayjs(new Date(values.date));
+        if (values.startTime)
+          values.startTime = dayjs(new Date(values.startTime));
+        if (values.endTime) values.endTime = dayjs(new Date(values.endTime));
+        form.setFieldsValue(values);
+      })
+      .catch((error) => console.log('error', error));
+  }, []);
 
   const onFinish = (values) => {
     values.engineerSignature = engineerSignRef.current.getPng();
@@ -19,9 +51,18 @@ const SessionForm = () => {
     values.clientSignature = clientSignRef.current.getPng();
 
     axios
-      .post('http://localhost:3001/session-reports', values)
+      .post('http://localhost:3001/session-reports/finish', values)
       .then((res) => console.log('success', res))
       .catch((error) => console.log('error', error));
+  };
+
+  const onUpdate = () => {
+    const values = form.getFieldsValue();
+
+    axios
+      .patch('http://localhost:3001/session-reports', values)
+      .then((res) => message('SUCCESS'))
+      .catch((error) => message('ERROR'));
   };
 
   const onFinishFailed = (errorInfo) => {
@@ -35,19 +76,21 @@ const SessionForm = () => {
           <Form
             form={form}
             name="form"
+            layout="vertical"
             initialValues={{}}
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
             autoComplete="off"
           >
+            <Form.Item name="_id" hidden />
             <Form.Item name="date" label="Date">
               <DatePicker />
             </Form.Item>
             <Form.Item name="startTime" label="Start Time">
-              <TimePicker />
+              <TimePicker showSecond={false} />
             </Form.Item>
             <Form.Item name="endTime" label="End Time">
-              <TimePicker />
+              <TimePicker showSecond={false} />
             </Form.Item>
             <Form.Item name="artist" label="Artist">
               <Input />
@@ -77,12 +120,18 @@ const SessionForm = () => {
             <ListField name="preAmpsUsed" title="Pre-Amps Used" />
             <ListField name="outboardGearUsed" title="Out board Gear Used" />
             <ListField name="instrumentsUsed" title="Instruments Used" />
-
             <Form.Item name="sslSessionName" label="SSL Session Name">
               <Input />
             </Form.Item>
             <Form.Item name="engineerSignature" label="Engineer Signature">
               <SignatureComponent ref={engineerSignRef} padNumber={1} />
+            </Form.Item>
+            <Form.Item
+              name="engineerEmail"
+              label="Engineer Email"
+              rules={EMAIL_RULES}
+            >
+              <Input />
             </Form.Item>
             <Form.Item
               name="assistantEngineerSignature"
@@ -93,17 +142,44 @@ const SessionForm = () => {
                 padNumber={2}
               />
             </Form.Item>
+            <Form.Item
+              name="assistantEngineerEmail"
+              label="Assistant Engineer Email"
+              rules={EMAIL_RULES}
+            >
+              <Input />
+            </Form.Item>
+
             <Form.Item name="clientSignature" label="Client Signature">
               <SignatureComponent ref={clientSignRef} padNumber={3} />
+            </Form.Item>
+            <Form.Item
+              name="clientEmail"
+              label="Client Email"
+              rules={EMAIL_RULES}
+            >
+              <Input />
             </Form.Item>
             <Form.Item name="notes" label="Additional Notes">
               <TextArea />
             </Form.Item>
-            <Form.Item>
-              <Button type="primary" htmlType="submit">
-                Submit
+            <div
+              style={{
+                display: 'flex',
+                gap: 10,
+                flex: 1,
+                justifyContent: 'center',
+              }}
+            >
+              <Button type="primary" onClick={onUpdate}>
+                Save
               </Button>
-            </Form.Item>
+              <Form.Item>
+                <Button type="primary" htmlType="submit">
+                  Submit
+                </Button>
+              </Form.Item>
+            </div>
           </Form>
         </Col>
       </Row>

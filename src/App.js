@@ -2,6 +2,7 @@ import './App.css';
 import { Layout, Typography } from 'antd';
 import SessionForm from './containers/SessionForm';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import Home from './containers/Home';
 
 const { Content } = Layout;
 const { Title } = Typography;
@@ -9,6 +10,10 @@ const { Title } = Typography;
 const routes = createBrowserRouter([
   {
     path: '/',
+    element: <Home />,
+  },
+  {
+    path: '/:id',
     element: <SessionForm />,
   },
   {
