@@ -17,6 +17,7 @@ import axios from 'axios';
 import { INVALID_EMAIL, REQUIRED } from '../../utils/messages';
 import { useParams } from 'react-router-dom';
 import dayjs from 'dayjs';
+import SessionReportService from '../../services/SessionReportService';
 
 const EMAIL_RULES = [
   { required: true, message: REQUIRED },
@@ -52,6 +53,7 @@ const SessionForm = () => {
   const clientSignRef = useRef();
   const [form] = Form.useForm();
   let { id } = useParams();
+  const service = SessionReportService();
 
   const loadFormData = (values) => {
     if (values.date) values.date = dayjs(new Date(values.date));
@@ -76,13 +78,9 @@ const SessionForm = () => {
   };
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:3001/session-reports/${id}`)
-      .then((res) => {
-        const values = res.data;
-        loadFormData(values);
-      })
-      .catch((error) => console.log('error', error));
+    service.get(id).then((data) => {
+      loadFormData(data);
+    });
   }, []);
 
   const onFinish = (values) => {
@@ -91,10 +89,9 @@ const SessionForm = () => {
       assistantEngineerSignRef.current.getPng();
     values.clientSignature = clientSignRef.current.getPng();
 
-    axios
-      .post('http://localhost:3001/session-reports', values)
-      .then((res) => console.log('success', res))
-      .catch((error) => console.log('error', error));
+    service
+      .finish(values)
+      .then(() => message.success('The contract was finished successfully.'));
   };
 
   const onUpdate = () => {
@@ -104,10 +101,9 @@ const SessionForm = () => {
       assistantEngineerSignRef.current.getPng();
     values.clientSignature = clientSignRef.current.getPng();
 
-    axios
-      .patch('http://localhost:3001/session-reports', values)
-      .then((res) => message('SUCCESS'))
-      .catch((error) => message('ERROR'));
+    service
+      .update(values)
+      .then(() => message.success('Your changes were saved successfully.'));
   };
 
   const onFinishFailed = (errorInfo) => {

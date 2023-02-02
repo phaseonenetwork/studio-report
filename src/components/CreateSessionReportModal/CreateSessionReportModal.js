@@ -1,8 +1,9 @@
 import React from 'react';
-import { Button, Form, Input, Row, Col, Modal } from 'antd';
+import { Button, Form, Input, Row, Col, Modal, message } from 'antd';
 
 import axios from 'axios';
 import { INVALID_EMAIL, REQUIRED } from '../../utils/messages';
+import SessionReportService from '../../services/SessionReportService';
 
 const EMAIL_RULES = [
   { required: true, message: REQUIRED },
@@ -11,12 +12,10 @@ const EMAIL_RULES = [
 
 const CreateSessionReportModal = ({ isOpen, onCancel }) => {
   const [form] = Form.useForm();
+  const service = SessionReportService();
 
   const onFinish = (values) => {
-    axios
-      .post('http://localhost:3001/session-reports/create', values)
-      .then((res) => console.log('success', res))
-      .catch((error) => console.log('error', error));
+    service.create(values).catch(() => message.error('Something went wrong!'));
   };
 
   return (
