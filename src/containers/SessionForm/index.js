@@ -23,6 +23,29 @@ const EMAIL_RULES = [
   { type: 'email', message: INVALID_EMAIL },
 ];
 
+const formDefaultValues = {
+  data: '',
+  startTime: '',
+  endTime: '',
+  artist: '',
+  label: '',
+  personWhoBooked: '',
+  engineer: '',
+  assistantEngineer: '',
+  featuredArtists: '',
+  sessionName: '',
+  fileLocation: '',
+  micsUsed: [],
+  preAmpsUsed: [],
+  outboardGearUsed: [],
+  instrumentsUsed: [],
+  sslSessionName: '',
+  engineerSignature: '',
+  assistantEngineerSignature: '',
+  clientSignature: '',
+  notes: '',
+};
+
 const SessionForm = () => {
   const engineerSignRef = useRef();
   const assistantEngineerSignRef = useRef();
@@ -69,13 +92,17 @@ const SessionForm = () => {
     values.clientSignature = clientSignRef.current.getPng();
 
     axios
-      .post('http://localhost:3001/session-reports/finish', values)
+      .post('http://localhost:3001/session-reports', values)
       .then((res) => console.log('success', res))
       .catch((error) => console.log('error', error));
   };
 
   const onUpdate = () => {
     const values = form.getFieldsValue();
+    values.engineerSignature = engineerSignRef.current.getPng();
+    values.assistantEngineerSignature =
+      assistantEngineerSignRef.current.getPng();
+    values.clientSignature = clientSignRef.current.getPng();
 
     axios
       .patch('http://localhost:3001/session-reports', values)
@@ -95,7 +122,7 @@ const SessionForm = () => {
             form={form}
             name="form"
             layout="vertical"
-            initialValues={{}}
+            initialValues={{ ...formDefaultValues }}
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
             autoComplete="off"
