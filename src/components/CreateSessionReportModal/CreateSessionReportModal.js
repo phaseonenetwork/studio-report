@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Button, Form, Input, Row, Col, Modal, message } from 'antd';
 
 import axios from 'axios';
 import { INVALID_EMAIL, REQUIRED } from '../../utils/messages';
 import SessionReportService from '../../services/SessionReportService';
+import { LoadingContext } from '../Loading/LoadingContext';
 
 const EMAIL_RULES = [
   { required: true, message: REQUIRED },
@@ -14,8 +15,20 @@ const CreateSessionReportModal = ({ isOpen, onCancel }) => {
   const [form] = Form.useForm();
   const service = SessionReportService();
 
+  const { setLoading } = useContext(LoadingContext);
+
   const onFinish = (values) => {
-    service.create(values).catch(() => message.error('Something went wrong!'));
+    setLoading(true);
+    service
+      .create(values)
+      .then(() => {
+        message.success('Session Report created successfully!');
+        setLoading(false);
+      })
+      .catch(() => {
+        message.error('Something went wrong!');
+        setLoading(false);
+      });
   };
 
   return (

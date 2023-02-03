@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   Button,
   DatePicker,
@@ -20,6 +20,7 @@ import SessionReportService from '../../services/SessionReportService';
 // import Timepicker from 'react-time-picker';
 import './index.css';
 import Finished from '../../components/Finished/Finished';
+import { LoadingContext } from '../../components/Loading/LoadingContext';
 
 const EMAIL_RULES = [
   { required: true, message: REQUIRED },
@@ -58,6 +59,8 @@ const SessionForm = () => {
   const service = SessionReportService();
   const [finished, setFinished] = useState(false);
 
+  const { setLoading } = useContext(LoadingContext);
+
   const loadFormData = (values) => {
     if (values.date) values.date = dayjs(new Date(values.date));
     if (values.startTime) values.startTime = dayjs(new Date(values.startTime));
@@ -82,16 +85,19 @@ const SessionForm = () => {
 
   useEffect(() => {
     if (id) {
+      setLoading(true);
+
       service
         .get(id)
         .then((data) => {
           if (data) loadFormData(data);
+          setLoading(false);
         })
         .catch((error) => {
-          console.log(error.statusCode);
           if (error?.statusCode === 403) {
             setFinished(true);
           }
+          setLoading(false);
         });
     }
   }, []);
@@ -102,9 +108,14 @@ const SessionForm = () => {
       assistantEngineerSignRef.current.getPng();
     values.clientSignature = clientSignRef.current.getPng();
 
+    setLoading(true);
     service
       .finish(values)
-      .then(() => message.success('The contract was finished successfully.'));
+      .then(() => {
+        message.success('The contract was finished successfully.');
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
   };
 
   const onUpdate = () => {
@@ -113,10 +124,15 @@ const SessionForm = () => {
     values.assistantEngineerSignature =
       assistantEngineerSignRef.current.getPng();
     values.clientSignature = clientSignRef.current.getPng();
+    setLoading(true);
 
     service
       .update(values)
-      .then(() => message.success('Your changes were saved successfully.'));
+      .then(() => {
+        message.success('Your changes were saved successfully.');
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
   };
 
   const onFinishFailed = (errorInfo) => {

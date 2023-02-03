@@ -3,6 +3,8 @@ import { Layout, Typography } from 'antd';
 import SessionForm from './containers/SessionForm';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Home from './containers/Home';
+import { LoadingProvider } from './components/Loading/LoadingContext';
+import Loading from './components/Loading/Loading';
 
 const { Content } = Layout;
 const { Title } = Typography;
@@ -24,15 +26,18 @@ const routes = createBrowserRouter([
 
 const App = () => {
   return (
-    <Layout
-      style={{ padding: '2rem 2.5rem', minHeight: '100vh' }}
-      className="App"
-    >
-      <Content>
-        <Title>Embassy Studios Session Report</Title>
-        <RouterProvider router={routes} />
-      </Content>
-    </Layout>
+    <LoadingProvider>
+      <Loading />
+      <Layout
+        style={{ padding: '2rem 2.5rem', minHeight: '100vh' }}
+        className="App"
+      >
+        <Content>
+          <Title>Embassy Studios Session Report</Title>
+          <RouterProvider router={routes} />
+        </Content>
+      </Layout>
+    </LoadingProvider>
   );
 };
 
