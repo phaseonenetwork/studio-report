@@ -1,23 +1,25 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Button,
   DatePicker,
   Form,
   Input,
-  TimePicker,
   Row,
   Col,
   message,
+  TimePicker,
 } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
 import SignatureComponent from '../../components/SignaturePad/SignaturePad';
 import ListField from '../../components/ListField/ListField';
 import { useRef } from 'react';
-import axios from 'axios';
 import { INVALID_EMAIL, REQUIRED } from '../../utils/messages';
 import { useParams } from 'react-router-dom';
 import dayjs from 'dayjs';
 import SessionReportService from '../../services/SessionReportService';
+// import Timepicker from 'react-time-picker';
+import './index.css';
+import Finished from '../../components/Finished/Finished';
 
 const EMAIL_RULES = [
   { required: true, message: REQUIRED },
@@ -54,6 +56,7 @@ const SessionForm = () => {
   const [form] = Form.useForm();
   let { id } = useParams();
   const service = SessionReportService();
+  const [finished, setFinished] = useState(false);
 
   const loadFormData = (values) => {
     if (values.date) values.date = dayjs(new Date(values.date));
@@ -78,9 +81,19 @@ const SessionForm = () => {
   };
 
   useEffect(() => {
-    service.get(id).then((data) => {
-      loadFormData(data);
-    });
+    if (id) {
+      service
+        .get(id)
+        .then((data) => {
+          if (data) loadFormData(data);
+        })
+        .catch((error) => {
+          console.log(error.statusCode);
+          if (error?.statusCode === 403) {
+            setFinished(true);
+          }
+        });
+    }
   }, []);
 
   const onFinish = (values) => {
@@ -112,118 +125,123 @@ const SessionForm = () => {
 
   return (
     <>
-      <Row align="middle" justify="center">
-        <Col span={16}>
-          <Form
-            form={form}
-            name="form"
-            layout="vertical"
-            initialValues={{ ...formDefaultValues }}
-            onFinish={onFinish}
-            onFinishFailed={onFinishFailed}
-            autoComplete="off"
-          >
-            <Form.Item name="_id" hidden />
-            <Form.Item name="date" label="Date">
-              <DatePicker />
-            </Form.Item>
-            <Form.Item name="startTime" label="Start Time">
-              <TimePicker showSecond={false} />
-            </Form.Item>
-            <Form.Item name="endTime" label="End Time">
-              <TimePicker showSecond={false} />
-            </Form.Item>
-            <Form.Item name="artist" label="Artist">
-              <Input />
-            </Form.Item>
-            <Form.Item name="label" label="Label">
-              <Input />
-            </Form.Item>
-            <Form.Item name="personWhoBooked" label="Person Who Booked">
-              <Input />
-            </Form.Item>
-            <Form.Item name="engineer" label="Engineer">
-              <Input />
-            </Form.Item>
-            <Form.Item name="assistantEngineer" label="Assistant Engineer">
-              <Input />
-            </Form.Item>
-            <Form.Item name="featuredArtists" label="Featured Artists">
-              <Input />
-            </Form.Item>
-            <Form.Item name="sessionName" label="Session Name">
-              <Input />
-            </Form.Item>
-            <Form.Item name="fileLocation" label="File Location">
-              <Input />
-            </Form.Item>
-            <ListField name="micsUsed" title="Mics Used" />
-            <ListField name="preAmpsUsed" title="Pre-Amps Used" />
-            <ListField name="outboardGearUsed" title="Out board Gear Used" />
-            <ListField name="instrumentsUsed" title="Instruments Used" />
-            <Form.Item name="sslSessionName" label="SSL Session Name">
-              <Input />
-            </Form.Item>
-            <Form.Item name="engineerSignature" label="Engineer Signature">
-              <SignatureComponent ref={engineerSignRef} padNumber={1} />
-            </Form.Item>
-            <Form.Item
-              name="engineerEmail"
-              label="Engineer Email"
-              rules={EMAIL_RULES}
+      {!finished && (
+        <Row align="middle" justify="center">
+          <Col span={16}>
+            <Form
+              form={form}
+              name="form"
+              layout="vertical"
+              initialValues={{ ...formDefaultValues }}
+              onFinish={onFinish}
+              onFinishFailed={onFinishFailed}
+              autoComplete="off"
             >
-              <Input />
-            </Form.Item>
-            <Form.Item
-              name="assistantEngineerSignature"
-              label="Assistant Engineer Signature"
-            >
-              <SignatureComponent
-                ref={assistantEngineerSignRef}
-                padNumber={2}
-              />
-            </Form.Item>
-            <Form.Item
-              name="assistantEngineerEmail"
-              label="Assistant Engineer Email"
-              rules={EMAIL_RULES}
-            >
-              <Input />
-            </Form.Item>
-
-            <Form.Item name="clientSignature" label="Client Signature">
-              <SignatureComponent ref={clientSignRef} padNumber={3} />
-            </Form.Item>
-            <Form.Item
-              name="clientEmail"
-              label="Client Email"
-              rules={EMAIL_RULES}
-            >
-              <Input />
-            </Form.Item>
-            <Form.Item name="notes" label="Additional Notes">
-              <TextArea />
-            </Form.Item>
-            <div
-              style={{
-                display: 'flex',
-                gap: 10,
-                flex: 1,
-                justifyContent: 'center',
-              }}
-            >
-              <Button type="primary" onClick={onUpdate}>
-                Save
-              </Button>
-              <Form.Item>
-                <Button type="primary" htmlType="submit">
-                  Submit
-                </Button>
+              <Form.Item name="_id" hidden />
+              <Form.Item name="date" label="Date">
+                <DatePicker style={{ width: '100%' }} />
               </Form.Item>
-            </div>
-          </Form>
-        </Col>
-      </Row>
+              <Form.Item name="startTime" label="Start Time">
+                <TimePicker showSecond={false} style={{ width: '100%' }} />
+                {/* <Timepicker disableClock className="custom-timepicker-theme" /> */}
+              </Form.Item>
+              <Form.Item name="endTime" label="End Time">
+                <TimePicker showSecond={false} style={{ width: '100%' }} />
+                {/* <Timepicker disableClock className="custom-timepicker-theme" /> */}
+              </Form.Item>
+              <Form.Item name="artist" label="Artist">
+                <Input />
+              </Form.Item>
+              <Form.Item name="label" label="Label">
+                <Input />
+              </Form.Item>
+              <Form.Item name="personWhoBooked" label="Person Who Booked">
+                <Input />
+              </Form.Item>
+              <Form.Item name="engineer" label="Engineer">
+                <Input />
+              </Form.Item>
+              <Form.Item name="assistantEngineer" label="Assistant Engineer">
+                <Input />
+              </Form.Item>
+              <Form.Item name="featuredArtists" label="Featured Artists">
+                <Input />
+              </Form.Item>
+              <Form.Item name="sessionName" label="Session Name">
+                <Input />
+              </Form.Item>
+              <Form.Item name="fileLocation" label="File Location">
+                <Input />
+              </Form.Item>
+              <ListField name="micsUsed" title="Mics Used" />
+              <ListField name="preAmpsUsed" title="Pre-Amps Used" />
+              <ListField name="outboardGearUsed" title="Out board Gear Used" />
+              <ListField name="instrumentsUsed" title="Instruments Used" />
+              <Form.Item name="sslSessionName" label="SSL Session Name">
+                <Input />
+              </Form.Item>
+              <Form.Item name="engineerSignature" label="Engineer Signature">
+                <SignatureComponent ref={engineerSignRef} padNumber={1} />
+              </Form.Item>
+              <Form.Item
+                name="engineerEmail"
+                label="Engineer Email"
+                rules={EMAIL_RULES}
+              >
+                <Input />
+              </Form.Item>
+              <Form.Item
+                name="assistantEngineerSignature"
+                label="Assistant Engineer Signature"
+              >
+                <SignatureComponent
+                  ref={assistantEngineerSignRef}
+                  padNumber={2}
+                />
+              </Form.Item>
+              <Form.Item
+                name="assistantEngineerEmail"
+                label="Assistant Engineer Email"
+                rules={EMAIL_RULES}
+              >
+                <Input />
+              </Form.Item>
+
+              <Form.Item name="clientSignature" label="Client Signature">
+                <SignatureComponent ref={clientSignRef} padNumber={3} />
+              </Form.Item>
+              <Form.Item
+                name="clientEmail"
+                label="Client Email"
+                rules={EMAIL_RULES}
+              >
+                <Input />
+              </Form.Item>
+              <Form.Item name="notes" label="Additional Notes">
+                <TextArea />
+              </Form.Item>
+              <div
+                style={{
+                  display: 'flex',
+                  gap: 10,
+                  flex: 1,
+                  justifyContent: 'center',
+                }}
+              >
+                <Button type="primary" onClick={onUpdate}>
+                  Save
+                </Button>
+                <Form.Item>
+                  <Button type="primary" htmlType="submit">
+                    Submit
+                  </Button>
+                </Form.Item>
+              </div>
+            </Form>
+          </Col>
+        </Row>
+      )}
+      {finished && <Finished />}
     </>
   );
 };

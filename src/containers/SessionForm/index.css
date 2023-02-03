@@ -1,0 +1,22 @@
+.custom-timepicker-theme .react-time-picker__wrapper {
+  padding: .25rem .5rem;
+  font-size: 15px;
+}
+
+.custom-timepicker-theme .react-time-picker__button__icon {
+  stroke: currentColor;
+}
+
+.custom-timepicker-theme input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.custom-timepicker-theme input::-webkit-outer-spin-button,{
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.custom-timepicker-theme input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}

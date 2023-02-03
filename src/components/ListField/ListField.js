@@ -12,6 +12,7 @@ const ListField = ({ name, label = 'Name', title }) => (
               key={field.key}
               style={{
                 display: 'flex',
+                alignItems: 'center',
               }}
             >
               <Form.Item name={name} {...field} label={label}>
@@ -19,13 +20,21 @@ const ListField = ({ name, label = 'Name', title }) => (
               </Form.Item>
               <Button
                 icon={<CloseOutlined />}
-                style={{ marginLeft: 5 }}
+                style={{ marginLeft: 5, marginTop: 5 }}
                 onClick={() => remove(field.name)}
                 danger
               />
             </div>
           ))}
-          <Button type='primary' onClick={() => add()} style={{ display: 'flex', marginTop: '.5rem', marginBottom: '.5rem' }}>
+          <Button
+            type="primary"
+            onClick={() => add()}
+            style={{
+              display: 'flex',
+              marginTop: '.5rem',
+              marginBottom: '.5rem',
+            }}
+          >
             Add
           </Button>
         </>

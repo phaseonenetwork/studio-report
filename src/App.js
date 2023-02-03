@@ -24,7 +24,10 @@ const routes = createBrowserRouter([
 
 const App = () => {
   return (
-    <Layout style={{ padding: '2rem 2.5rem' }} className="App">
+    <Layout
+      style={{ padding: '2rem 2.5rem', minHeight: '100vh' }}
+      className="App"
+    >
       <Content>
         <Title>Embassy Studios Session Report</Title>
         <RouterProvider router={routes} />
