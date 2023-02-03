@@ -14,7 +14,7 @@ import SignatureComponent from '../../components/SignaturePad/SignaturePad';
 import ListField from '../../components/ListField/ListField';
 import { useRef } from 'react';
 import { INVALID_EMAIL, REQUIRED } from '../../utils/messages';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import dayjs from 'dayjs';
 import SessionReportService from '../../services/SessionReportService';
 // import Timepicker from 'react-time-picker';
@@ -58,6 +58,7 @@ const SessionForm = () => {
   let { id } = useParams();
   const service = SessionReportService();
   const [finished, setFinished] = useState(false);
+  const navigate = useNavigate();
 
   const { setLoading } = useContext(LoadingContext);
 
@@ -96,6 +97,9 @@ const SessionForm = () => {
         .catch((error) => {
           if (error?.statusCode === 403) {
             setFinished(true);
+          }
+          if (error?.statusCode === 404) {
+            navigate('/404');
           }
           setLoading(false);
         });

@@ -6,7 +6,7 @@ const Finished = () => (
     style={{ width: '100%', height: '100%' }}
     status="success"
     title="Success!"
-    subTitle="This Session Report was finished!."
+    subTitle="The Session Report was finished!"
   />
 );
 
