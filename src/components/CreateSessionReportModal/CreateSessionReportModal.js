@@ -61,15 +61,32 @@ const CreateSessionReportModal = ({ isOpen, onCancel }) => {
       message.success('Copied to clipboard!', 1);
     };
 
+    const onClickOpenForm = () => {
+      window.open(url);
+    };
+
     return (
       <Result
         status={resultStatus}
         title={resultTitle}
         subTitle={subTitle}
         extra={[
-          <Text key="report-url" keyboard>{url}</Text>,
-          <Button key="copy-btn" onClick={onClickCopyClipboard} style={{ marginTop: '.5rem' }}>
+          <Text key="report-url" keyboard>
+            {url}
+          </Text>,
+          <Button
+            key="copy-btn"
+            onClick={onClickCopyClipboard}
+            style={{ marginTop: '.5rem' }}
+          >
             Copy to clipboard
+          </Button>,
+          <Button
+            key="copy-btn"
+            onClick={onClickOpenForm}
+            style={{ marginTop: '.5rem' }}
+          >
+            Open Form
           </Button>,
         ]}
       />

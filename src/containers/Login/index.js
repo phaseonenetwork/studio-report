@@ -1,20 +1,21 @@
 import React from 'react';
 import { Button, Form, Input, Row, Col } from 'antd';
 import useAuth from '../../hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const { login } = useAuth();
+  const navigate = useNavigate();
 
   const handleLoginSubmit = async (values) => {
-    console.log(login);
     try {
       await login(values.username, values.password);
-      // redirect here
+      navigate('/home');
     } catch (e) {
       console.error(e);
       // handle error
     }
-  }
+  };
 
   return (
     <Row style={{ marginTop: '3rem' }} align="middle" justify="center">

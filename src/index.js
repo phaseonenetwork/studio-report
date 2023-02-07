@@ -9,7 +9,9 @@ import { ConfigProvider, theme } from 'antd';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <ConfigProvider theme={{ algorithm: theme.darkAlgorithm }}>
+    <ConfigProvider
+      theme={{ algorithm: theme.darkAlgorithm, token: { fontSize: 18 } }}
+    >
       <App />
     </ConfigProvider>
   </React.StrictMode>

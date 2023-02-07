@@ -162,11 +162,19 @@ const SessionForm = () => {
                 <DatePicker style={{ width: '100%' }} />
               </Form.Item>
               <Form.Item name="startTime" label="Start Time">
-                <TimePicker showSecond={false} style={{ width: '100%' }} />
+                <TimePicker
+                  showSecond={false}
+                  style={{ width: '100%' }}
+                  format="hh:mm A"
+                />
                 {/* <Timepicker disableClock className="custom-timepicker-theme" /> */}
               </Form.Item>
               <Form.Item name="endTime" label="End Time">
-                <TimePicker showSecond={false} style={{ width: '100%' }} />
+                <TimePicker
+                  showSecond={false}
+                  style={{ width: '100%' }}
+                  format="hh:mm A"
+                />
                 {/* <Timepicker disableClock className="custom-timepicker-theme" /> */}
               </Form.Item>
               <Form.Item name="artist" label="Artist">
