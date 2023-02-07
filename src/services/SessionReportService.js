@@ -1,7 +1,8 @@
 import axios from './axios';
 
-const BASE_URL = 'http://localhost:3001';
-// const BASE_URL = 'https://api.theembassystudios.com';
+const BASE_URL = process.env.REACT_APP_API_URL;
+
+console.log('BASE_URL', BASE_URL);
 
 const SessionReportService = () => ({
   create: (values) => axios.post(`${BASE_URL}/session-reports/create`, values),
