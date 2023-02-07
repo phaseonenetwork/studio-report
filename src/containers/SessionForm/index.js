@@ -147,7 +147,7 @@ const SessionForm = () => {
     <>
       {!finished && (
         <Row align="middle" justify="center">
-          <Col span={16}>
+          <Col lg={16} md={23} sm={23} xs={23}>
             <Form
               form={form}
               name="form"
