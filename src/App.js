@@ -6,11 +6,17 @@ import Home from './containers/Home';
 import { LoadingProvider } from './components/Loading/LoadingContext';
 import Loading from './components/Loading/Loading';
 import Error404 from './components/errors/Error404';
+import Login from './containers/Login';
+import { AuthProvider } from './context/AuthContext';
 
 const { Content } = Layout;
 const { Title } = Typography;
 
 const routes = createBrowserRouter([
+  {
+    path: '/login',
+    element: <Login />,
+  },
   {
     path: '/',
     element: <Home />,
@@ -28,18 +34,20 @@ const routes = createBrowserRouter([
 
 const App = () => {
   return (
-    <LoadingProvider>
-      <Loading />
-      <Layout
-        style={{ padding: '2rem 2.5rem', minHeight: '100vh' }}
-        className="App"
-      >
-        <Content>
-          <Title>Embassy Studios Session Report</Title>
-          <RouterProvider router={routes} />
-        </Content>
-      </Layout>
-    </LoadingProvider>
+    <AuthProvider>
+      <LoadingProvider>
+        <Loading />
+        <Layout
+          style={{ padding: '2rem 2.5rem', minHeight: '100vh' }}
+          className="App"
+        >
+          <Content>
+            <Title>Embassy Studios Session Report</Title>
+            <RouterProvider router={routes} />
+          </Content>
+        </Layout>
+      </LoadingProvider>
+    </AuthProvider>
   );
 };
 
