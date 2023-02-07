@@ -10,7 +10,7 @@ const Login = () => {
   const handleLoginSubmit = async (values) => {
     try {
       await login(values.username, values.password);
-      navigate('/home');
+      navigate('/');
     } catch (e) {
       console.error(e);
       // handle error
