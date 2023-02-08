@@ -14,12 +14,7 @@ import SignatureComponent from '../../components/SignaturePad/SignaturePad';
 import ListField from '../../components/ListField/ListField';
 import { useRef } from 'react';
 import { INVALID_EMAIL, REQUIRED } from '../../utils/messages';
-import {
-  useNavigate,
-  useParams,
-  Navigate,
-  useSearchParams,
-} from 'react-router-dom';
+import { useNavigate, Navigate, useParams } from 'react-router-dom';
 import dayjs from 'dayjs';
 import SessionReportService from '../../services/SessionReportService';
 // import Timepicker from 'react-time-picker';
@@ -66,7 +61,6 @@ const SessionForm = () => {
   const [finished, setFinished] = useState(null);
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
-  const [searchParams, setSearchParams] = useSearchParams();
 
   const { setLoading } = useContext(LoadingContext);
 
@@ -93,7 +87,7 @@ const SessionForm = () => {
   };
 
   const getSessionReport = () => {
-    const formId = searchParams.get('formId');
+    const formId = id;
     if (formId) {
       setLoading(true);
       service
@@ -130,7 +124,7 @@ const SessionForm = () => {
     values.assistantEngineerSignature =
       assistantEngineerSignRef.current.getPng();
     values.clientSignature = clientSignRef.current.getPng();
-    const formId = searchParams.get('formId');
+    const formId = id;
 
     if (formId) {
       values._id = formId;
@@ -158,9 +152,10 @@ const SessionForm = () => {
     service
       .update(values)
       .then((response) => {
-        setSearchParams({ formId: response?._id });
         message.success('Your changes were saved successfully.');
         setLoading(false);
+        navigate(`/${response?._id}`);
+        // setSearchParams({ formId: response?._id });
       })
       .catch(() => setLoading(false));
   };
@@ -180,7 +175,7 @@ const SessionForm = () => {
               layout="vertical"
               initialValues={{
                 ...formDefaultValues,
-                _id: searchParams.get('formId'),
+                _id: id,
               }}
               onFinish={onFinish}
               onFinishFailed={onFinishFailed}

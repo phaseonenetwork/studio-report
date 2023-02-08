@@ -9,10 +9,10 @@ const routes = createBrowserRouter([
     path: '/login',
     element: <Login />,
   },
-  // {
-  //   path: '/',
-  //   element: <Home />,
-  // },
+  {
+    path: '/:id',
+    element: <SessionForm />,
+  },
   {
     path: '/',
     element: <SessionForm />,
