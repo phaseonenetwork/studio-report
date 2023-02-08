@@ -1,4 +1,4 @@
-import React, { createContext, useReducer } from 'react';
+import React, { createContext, useReducer, useEffect } from 'react';
 import axios from '../services/axios';
 const BASE_URL = process.env.REACT_APP_API_URL;
 
@@ -69,7 +69,6 @@ export const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const login = async (username, password) => {
-    console.log({ username, password });
     const { access_token: accessToken } = await axios.post(
       `${BASE_URL}/auth/login`,
       {
@@ -90,6 +89,42 @@ export const AuthProvider = ({ children }) => {
     setSession(null);
     dispatch({ type: 'LOGOUT' });
   };
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const accessToken = window.localStorage.getItem('accessToken');
+
+        if (accessToken) {
+          setSession(accessToken);
+
+          dispatch({
+            type: 'INIT',
+            payload: {
+              isAuthenticated: true,
+            },
+          });
+        } else {
+          dispatch({
+            type: 'INIT',
+            payload: {
+              isAuthenticated: false,
+              user: null,
+            },
+          });
+        }
+      } catch (error) {
+        console.error(err);
+        dispatch({
+          type: 'INIT',
+          payload: {
+            isAuthenticated: false,
+            user: null,
+          },
+        });
+      }
+    })();
+  }, []);
 
   return (
     <AuthContext.Provider

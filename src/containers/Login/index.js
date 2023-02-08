@@ -1,12 +1,13 @@
 import React from 'react';
 import { Button, Form, Input, Row, Col, message } from 'antd';
 import useAuth from '../../hooks/useAuth';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, Navigate } from 'react-router-dom';
 
 const Login = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const { isAuthenticated } = useAuth();
 
   const handleLoginSubmit = async (values) => {
     try {
@@ -17,6 +18,10 @@ const Login = () => {
       message.warning('Please, check your credentials!');
     }
   };
+
+  if (isAuthenticated) {
+    return <Navigate to="/" replace />;
+  }
 
   return (
     <Row style={{ marginTop: '5rem' }} align="middle" justify="center">
