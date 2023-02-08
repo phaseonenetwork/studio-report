@@ -8,6 +8,7 @@ import {
   Col,
   message,
   TimePicker,
+  Checkbox,
 } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
 import SignatureComponent from '../../components/SignaturePad/SignaturePad';
@@ -124,6 +125,13 @@ const SessionForm = () => {
       values._id = formId;
     }
 
+    if (!values.agree) {
+      message.error('You need to accept terms and conditions.');
+      return 0;
+    }
+
+    delete values.agree;
+
     setLoading(true);
     service
       .finish(values)
@@ -141,7 +149,14 @@ const SessionForm = () => {
     values.assistantEngineerSignature =
       assistantEngineerSignRef.current.getPng();
     values.clientSignature = clientSignRef.current.getPng();
+
+    if (!values.agree) {
+      message.error('You need to accept terms and conditions.');
+      return 0;
+    }
     setLoading(true);
+
+    delete values.agree;
 
     service
       .update(values)
@@ -240,6 +255,14 @@ const SessionForm = () => {
               </Form.Item>
               <Form.Item name="clientSignature" label="Client Signature">
                 <SignatureComponent ref={clientSignRef} padNumber={3} />
+              </Form.Item>
+              <Form.Item name="agree" valuePropName="checked">
+                <Checkbox>
+                  By signing this document I herby agree to abide by the terms
+                  and conditions presented within and can confirm, to the best
+                  of my knowledge, that all information presented within is
+                  accurate and truthful.
+                </Checkbox>
               </Form.Item>
               <Form.Item name="notes" label="Additional Notes">
                 <TextArea />
