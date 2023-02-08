@@ -12,7 +12,7 @@ axios.interceptors.response.use(
   (response) => response.data,
   (error) => {
     if (error?.response?.status === 401) {
-      routes.navigate('/login');
+      routes.navigate('/login', { state: { redirected: true } });
     }
 
     throw error.response.data || new Error('Something went wrong!');

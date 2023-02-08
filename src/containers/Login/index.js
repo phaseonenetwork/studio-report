@@ -1,16 +1,18 @@
 import React from 'react';
 import { Button, Form, Input, Row, Col, message } from 'antd';
 import useAuth from '../../hooks/useAuth';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleLoginSubmit = async (values) => {
     try {
       await login(values.username, values.password);
-      navigate('/');
+      const to = location.state?.redirected ? -2 : '/';
+      navigate(to);
     } catch (e) {
       message.warning('Please, check your credentials!');
     }
