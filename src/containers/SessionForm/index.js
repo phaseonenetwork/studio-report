@@ -13,7 +13,6 @@ import TextArea from 'antd/es/input/TextArea';
 import SignatureComponent from '../../components/SignaturePad/SignaturePad';
 import ListField from '../../components/ListField/ListField';
 import { useRef } from 'react';
-import { INVALID_EMAIL, REQUIRED } from '../../utils/messages';
 import { useNavigate, Navigate, useParams } from 'react-router-dom';
 import dayjs from 'dayjs';
 import SessionReportService from '../../services/SessionReportService';
@@ -22,11 +21,6 @@ import './index.css';
 import Finished from '../../components/Finished/Finished';
 import { LoadingContext } from '../../components/Loading/LoadingContext';
 import useAuth from '../../hooks/useAuth';
-
-const EMAIL_RULES = [
-  { required: true, message: REQUIRED },
-  { type: 'email', message: INVALID_EMAIL },
-];
 
 const formDefaultValues = {
   data: '',
@@ -236,13 +230,6 @@ const SessionForm = () => {
                 <SignatureComponent ref={engineerSignRef} padNumber={1} />
               </Form.Item>
               <Form.Item
-                name="engineerEmail"
-                label="Engineer Email"
-                rules={EMAIL_RULES}
-              >
-                <Input />
-              </Form.Item>
-              <Form.Item
                 name="assistantEngineerSignature"
                 label="Assistant Engineer Signature"
               >
@@ -251,23 +238,8 @@ const SessionForm = () => {
                   padNumber={2}
                 />
               </Form.Item>
-              <Form.Item
-                name="assistantEngineerEmail"
-                label="Assistant Engineer Email"
-                rules={EMAIL_RULES}
-              >
-                <Input />
-              </Form.Item>
-
               <Form.Item name="clientSignature" label="Client Signature">
                 <SignatureComponent ref={clientSignRef} padNumber={3} />
-              </Form.Item>
-              <Form.Item
-                name="clientEmail"
-                label="Client Email"
-                rules={EMAIL_RULES}
-              >
-                <Input />
               </Form.Item>
               <Form.Item name="notes" label="Additional Notes">
                 <TextArea />
