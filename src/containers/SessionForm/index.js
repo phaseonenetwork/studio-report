@@ -14,13 +14,19 @@ import SignatureComponent from '../../components/SignaturePad/SignaturePad';
 import ListField from '../../components/ListField/ListField';
 import { useRef } from 'react';
 import { INVALID_EMAIL, REQUIRED } from '../../utils/messages';
-import { useNavigate, useParams } from 'react-router-dom';
+import {
+  useNavigate,
+  useParams,
+  Navigate,
+  useSearchParams,
+} from 'react-router-dom';
 import dayjs from 'dayjs';
 import SessionReportService from '../../services/SessionReportService';
 // import Timepicker from 'react-time-picker';
 import './index.css';
 import Finished from '../../components/Finished/Finished';
 import { LoadingContext } from '../../components/Loading/LoadingContext';
+import useAuth from '../../hooks/useAuth';
 
 const EMAIL_RULES = [
   { required: true, message: REQUIRED },
@@ -59,6 +65,8 @@ const SessionForm = () => {
   const service = SessionReportService();
   const [finished, setFinished] = useState(null);
   const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const { setLoading } = useContext(LoadingContext);
 
@@ -85,10 +93,11 @@ const SessionForm = () => {
   };
 
   const getSessionReport = () => {
-    if (id) {
+    const formId = searchParams.get('formId');
+    if (formId) {
       setLoading(true);
       service
-        .get(id)
+        .get(formId)
         .then((data) => {
           if (data) {
             if (data.status === 'completed') {
@@ -108,6 +117,10 @@ const SessionForm = () => {
     }
   };
 
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />;
+  }
+
   useEffect(() => {
     getSessionReport();
   }, []);
@@ -117,6 +130,11 @@ const SessionForm = () => {
     values.assistantEngineerSignature =
       assistantEngineerSignRef.current.getPng();
     values.clientSignature = clientSignRef.current.getPng();
+    const formId = searchParams.get('formId');
+
+    if (formId) {
+      values._id = formId;
+    }
 
     setLoading(true);
     service
@@ -139,7 +157,8 @@ const SessionForm = () => {
 
     service
       .update(values)
-      .then(() => {
+      .then((response) => {
+        setSearchParams({ formId: response?._id });
         message.success('Your changes were saved successfully.');
         setLoading(false);
       })
@@ -159,7 +178,10 @@ const SessionForm = () => {
               form={form}
               name="form"
               layout="vertical"
-              initialValues={{ ...formDefaultValues }}
+              initialValues={{
+                ...formDefaultValues,
+                _id: searchParams.get('formId'),
+              }}
               onFinish={onFinish}
               onFinishFailed={onFinishFailed}
               autoComplete="off"

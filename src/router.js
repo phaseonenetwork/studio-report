@@ -9,12 +9,12 @@ const routes = createBrowserRouter([
     path: '/login',
     element: <Login />,
   },
+  // {
+  //   path: '/',
+  //   element: <Home />,
+  // },
   {
     path: '/',
-    element: <Home />,
-  },
-  {
-    path: '/:id',
     element: <SessionForm />,
   },
   { path: '/404', element: <Error404 /> },
