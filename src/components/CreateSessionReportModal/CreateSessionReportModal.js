@@ -127,14 +127,6 @@ const CreateSessionReportModal = ({ isOpen, onCancel }) => {
                 <Input />
               </Form.Item>
 
-              <Form.Item
-                name="clientEmail"
-                label="Client Email"
-                rules={EMAIL_RULES}
-              >
-                <Input />
-              </Form.Item>
-
               <Form.Item style={{ justifyContent: 'center', display: 'flex' }}>
                 <Button type="primary" htmlType="submit">
                   Create

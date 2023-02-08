@@ -1,9 +1,18 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from 'antd';
 import CreateSessionReportModal from '../../components/CreateSessionReportModal/CreateSessionReportModal';
+import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const navigate = useNavigate();
+
+  // Temporary
+  useEffect(() => {
+    if (!localStorage.getItem('accessToken')) {
+      navigate('/login');
+    }
+  }, []);
 
   return (
     <>

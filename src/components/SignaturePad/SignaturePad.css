@@ -10,10 +10,8 @@
 }
 
 .signature-pad {
-  position: absolute;
-  left: 0;
-  top: 0;
   width: 100%;
+  max-width: 800px;
   height: 200px;
   background-color: white;
 }

@@ -15,9 +15,7 @@ axios.interceptors.response.use(
       routes.navigate('/login');
     }
 
-    Promise.reject(
-      (error.response && error.response.data) || 'Something went wrong!'
-    );
+    throw error.response.data || new Error('Something went wrong!');
   }
 );
 

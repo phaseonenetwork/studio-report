@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Form, Input, Row, Col } from 'antd';
+import { Button, Form, Input, Row, Col, message } from 'antd';
 import useAuth from '../../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 
@@ -12,14 +12,13 @@ const Login = () => {
       await login(values.username, values.password);
       navigate('/');
     } catch (e) {
-      console.error(e);
-      // handle error
+      message.warning('Please, check your credentials!');
     }
   };
 
   return (
-    <Row style={{ marginTop: '3rem' }} align="middle" justify="center">
-      <Col span={8}>
+    <Row style={{ marginTop: '5rem' }} align="middle" justify="center">
+      <Col lg={8} md={16} sm={16} xs={16}>
         <Form
           name="login"
           initialValues={{

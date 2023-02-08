@@ -10,7 +10,7 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <ConfigProvider
-      theme={{ algorithm: theme.darkAlgorithm, token: { fontSize: 18 } }}
+      theme={{ algorithm: theme.darkAlgorithm, token: { fontSize: 16 } }}
     >
       <App />
     </ConfigProvider>

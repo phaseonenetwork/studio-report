@@ -60,6 +60,12 @@ const AuthContext = createContext({
 });
 
 export const AuthProvider = ({ children }) => {
+  const tokenStorage = localStorage.getItem('accessToken');
+
+  if (tokenStorage) {
+    initialState.isAuthenticated = true;
+  }
+
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const login = async (username, password) => {

@@ -57,7 +57,7 @@ const SessionForm = () => {
   const [form] = Form.useForm();
   let { id } = useParams();
   const service = SessionReportService();
-  const [finished, setFinished] = useState(false);
+  const [finished, setFinished] = useState(null);
   const navigate = useNavigate();
 
   const { setLoading } = useContext(LoadingContext);
@@ -84,26 +84,32 @@ const SessionForm = () => {
     form.setFieldsValue(values);
   };
 
-  useEffect(() => {
+  const getSessionReport = () => {
     if (id) {
       setLoading(true);
-
       service
         .get(id)
         .then((data) => {
-          if (data) loadFormData(data);
+          if (data) {
+            if (data.status === 'completed') {
+              setFinished(data);
+            } else {
+              loadFormData(data);
+            }
+          }
           setLoading(false);
         })
         .catch((error) => {
-          if (error?.statusCode === 403) {
-            setFinished(true);
-          }
           if (error?.statusCode === 404) {
             navigate('/404');
           }
           setLoading(false);
         });
     }
+  };
+
+  useEffect(() => {
+    getSessionReport();
   }, []);
 
   const onFinish = (values) => {
@@ -115,8 +121,9 @@ const SessionForm = () => {
     setLoading(true);
     service
       .finish(values)
-      .then(() => {
+      .then((data) => {
         message.success('The contract was finished successfully.');
+        setFinished(data);
         setLoading(false);
       })
       .catch(() => setLoading(false));
@@ -269,7 +276,7 @@ const SessionForm = () => {
           </Col>
         </Row>
       )}
-      {finished && <Finished />}
+      {finished && <Finished sessionReport={finished} />}
     </>
   );
 };
