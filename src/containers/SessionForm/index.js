@@ -139,6 +139,7 @@ const SessionForm = () => {
         message.success('The contract was finished successfully.');
         setFinished(data);
         setLoading(false);
+        navigate(`/${data?._id}`);
       })
       .catch(() => setLoading(false));
   };
@@ -150,10 +151,6 @@ const SessionForm = () => {
       assistantEngineerSignRef.current.getPng();
     values.clientSignature = clientSignRef.current.getPng();
 
-    if (!values.agree) {
-      message.error('You need to accept terms and conditions.');
-      return 0;
-    }
     setLoading(true);
 
     delete values.agree;
@@ -164,7 +161,6 @@ const SessionForm = () => {
         message.success('Your changes were saved successfully.');
         setLoading(false);
         navigate(`/${response?._id}`);
-        // setSearchParams({ formId: response?._id });
       })
       .catch(() => setLoading(false));
   };
